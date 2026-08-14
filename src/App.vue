@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import GameBoard from './components/GameBoard.vue'
+import { createGame } from './utils/game'
+import ScoreBoard from './components/ScoreBoard.vue';
+
+const game = ref(createGame('red'))
 
 </script>
 
@@ -8,6 +14,8 @@
             <h1>Con<span>4</span></h1>
         </header>
         <section class="game__content" aria-label="Con4 game">
+            <GameBoard :board="game.board" />
+            <ScoreBoard></ScoreBoard>
         </section>
     </main>
 </template>
