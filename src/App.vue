@@ -19,7 +19,8 @@ function selectColumn(column: number) {
         </header>
         <section class="game__content" aria-label="Con4 game">
             <GameBoard :board="game.board" :disabled="game.status !== 'playing'" @select-column="selectColumn" />
-            <ScoreBoard :status="game.status" :current-player="game.currentPlayer"></ScoreBoard>
+            <ScoreBoard :current-player="game.currentPlayer" :score="game.score" :status="game.status"
+                :winner="game.winner"></ScoreBoard>
         </section>
     </main>
 </template>
