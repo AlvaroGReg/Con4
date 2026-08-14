@@ -3,12 +3,22 @@ import { BOARD_COLUMNS, type Board } from '../types/game'
 
 const props = defineProps<{
     board: Board
+    disabled: boolean
 }>()
+
+const emit = defineEmits<{
+    selectColumn: [column: number]
+}>()
+
+function isColumnFull(column: number): boolean {
+    return props.board[0]?.[column] !== null
+}
 </script>
 
 <template>
     <div class="game-board" aria-label="Connect 4 board">
-        <button v-for="column in BOARD_COLUMNS" :key="column" class="board-column" type="button"
+        <button v-for="column in BOARD_COLUMNS" :key="column" class="board-column"
+            :disabled="disabled || isColumnFull(column - 1)" type="button" @click="emit('selectColumn', column - 1)"
             :aria-label="`Play in column ${column}`">
             <span v-for="(row, rowIndex) in board" :key="rowIndex" class="board-cell" :class="{
                 'cell-red': row[column - 1] === 'red',
@@ -41,6 +51,11 @@ const props = defineProps<{
             border-radius: 999px;
             outline: 0.2rem solid #ffcf4a;
             outline-offset: 0.2rem;
+        }
+
+        &:not(:disabled):hover .board-cell:not(.cell-red):not(.cell-yellow) {
+            background: #d7e2ff;
+            transform: translateY(-0.15rem);
         }
 
         .board-cell {

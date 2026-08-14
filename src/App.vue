@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import GameBoard from './components/GameBoard.vue'
-import { createGame } from './utils/game'
 import ScoreBoard from './components/ScoreBoard.vue';
+import { createGame, playMove } from './utils/game'
 
 const game = ref(createGame('red'))
+
+function selectColumn(column: number) {
+    game.value = playMove(game.value, column)
+}
 
 </script>
 
@@ -14,8 +18,8 @@ const game = ref(createGame('red'))
             <h1>Con<span>4</span></h1>
         </header>
         <section class="game__content" aria-label="Con4 game">
-            <GameBoard :board="game.board" />
-            <ScoreBoard></ScoreBoard>
+            <GameBoard :board="game.board" :disabled="game.status !== 'playing'" @select-column="selectColumn" />
+            <ScoreBoard :status="game.status" :current-player="game.currentPlayer"></ScoreBoard>
         </section>
     </main>
 </template>
