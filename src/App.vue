@@ -2,12 +2,20 @@
 import { ref } from 'vue'
 import GameBoard from './components/GameBoard.vue'
 import ScoreBoard from './components/ScoreBoard.vue';
-import { createGame, playMove } from './utils/game'
+import { createGame, getNextPlayer, playMove } from './utils/game'
 
 const game = ref(createGame('red'))
 
 function selectColumn(column: number) {
     game.value = playMove(game.value, column)
+}
+
+function startNextGame() {
+    game.value = createGame(getNextPlayer(game.value.startingPlayer), game.value.score)
+}
+
+function resetScore() {
+    game.value = createGame(getNextPlayer(game.value.startingPlayer))
 }
 
 </script>
@@ -20,7 +28,7 @@ function selectColumn(column: number) {
         <section class="game__content" aria-label="Con4 game">
             <GameBoard :board="game.board" :disabled="game.status !== 'playing'" @select-column="selectColumn" />
             <ScoreBoard :current-player="game.currentPlayer" :score="game.score" :status="game.status"
-                :winner="game.winner"></ScoreBoard>
+                :winner="game.winner" @next-game="startNextGame" @reset-score="resetScore" />
         </section>
     </main>
 </template>
